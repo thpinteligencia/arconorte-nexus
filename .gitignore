@@ -5,3 +5,9 @@ dist-ssr/
 .vscode/
 .idea/
 .DS_Store
+.aider*
+api/venv/
+api/data/*.json
+*.txt
+train_soy_rr.py
+claude/
