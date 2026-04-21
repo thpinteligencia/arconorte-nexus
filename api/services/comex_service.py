@@ -45,21 +45,30 @@ def get_latest_comex_data(uf_id: int, ncm: int, months_back: int = 12):
             "metrics": ["metricFOB", "metricKG"]
         }
         try:
-            resp = requests.post(API_URL, json=payload, timeout=15)
-            if resp.status_code == 200:
-                data = resp.json()
-                registros = data.get("data", [])
-                if isinstance(registros, dict): registros = registros.get("list", [])
-                
-                for r in registros:
-                    mes = r.get("monthNumber") or r.get("month")
-                    api_records.append({
-                        "date": f"{r['year']}-{str(mes).zfill(2)}-01",
-                        "kg": float(r["metricKG"]),
-                        "fob": float(r["metricFOB"])
-                    })
-            else:
-                print(f"⚠️ API retornou status {resp.status_code} para o ano {ano}")
+            # Implementação de Retry para evitar 429 (Rate Limit)
+            max_retries = 3
+            for attempt in range(max_retries):
+                resp = requests.post(API_URL, json=payload, timeout=15)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    registros = data.get("data", [])
+                    if isinstance(registros, dict): registros = registros.get("list", [])
+                    
+                    for r in registros:
+                        mes = r.get("monthNumber") or r.get("month")
+                        api_records.append({
+                            "date": f"{r['year']}-{str(mes).zfill(2)}-01",
+                            "kg": float(r["metricKG"]),
+                            "fob": float(r["metricFOB"])
+                        })
+                    break # Sucesso, sai do loop de retry
+                elif resp.status_code == 429:
+                    wait_time = (attempt + 1) * 5
+                    print(f"⚠️ Rate Limit (429). Aguardando {wait_time}s antes de tentar novamente...")
+                    time.sleep(wait_time)
+                else:
+                    print(f"⚠️ API retornou status {resp.status_code} para o ano {ano}")
+                    break
         except Exception as e:
             print(f"⚠️ Falha na conexão com ComexStat: {e}")
         

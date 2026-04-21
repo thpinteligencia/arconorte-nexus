@@ -8,6 +8,10 @@ dist-ssr/
 .aider*
 api/venv/
 api/data/*.json
+api/data/*.db
+__pycache__/
+*.py[cod]
+*$py.class
 *.txt
 train_soy_rr.py
 claude/

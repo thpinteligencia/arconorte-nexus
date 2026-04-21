@@ -1,0 +1,52 @@
+.nexusContainer {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.nexusMain {
+  flex: 1;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.nexusContent {
+  transition: 0.3s;
+}
+
+.nexusGridMain {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.loadingState {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.errorBanner {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.errorBanner button {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: auto;
+}

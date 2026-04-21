@@ -1,52 +1,51 @@
 # 🚀 Plano de Ação: ArcoNorte Nexus
 
-**Visão Geral:** Transformar o estudo preditivo (Micro-LSTM) focado no escoamento de soja no Arco Norte em uma **Plataforma de Inteligência Logística** (ArcoNorte Nexus) comercializável, com foco primário no Porto Seco de Roraima e na "Trinca de Grãos" (Soja, Milho e Arroz).
+**Visão Geral:** Transformar o estudo preditivo (Micro-LSTM) focado no escoamento de soja no Arco Norte em uma **Plataforma de Inteligência Logística** (ArcoNorte Nexus). Foco total na Soja para validação da tese DaaS antes da expansão para outros grãos.
 
 ---
 
 ## 🏁 Fase 1: O "Efeito UAU" (MVP Frontend) - *[CONCLUÍDO]*
-**Objetivo:** Criar um ativo visual de alto impacto para apresentar o conceito a stakeholders (Diretoria, Aprosoja, SEFAZ) antes da integração complexa de dados.
+**Objetivo:** Criar um ativo visual de alto impacto para apresentar o conceito a stakeholders.
 
-*   **Identidade Visual:** Aplicação das *Brand Guidelines* (Grafite Profundo, Verde Soja, Tipografia Neo-Grotesque).
-*   **Dashboard Operacional:** 
-    *   **Índice de Pressão de Escoamento (IPE):** "Velocímetro" dinâmico indicando o nível de estresse do pátio.
-    *   **Horizonte Preditivo:** Gráfico de área empilhada projetando 12 meses de safra.
-*   **Simulador "E-Se?":** Sliders interativos para simular choques de oferta (ex: supersafra de soja) e avaliar o impacto imediato na capacidade do porto.
+*   **Identidade Visual:** Aplicação das *Brand Guidelines* (Grafite Profundo, Verde Soja).
+*   **Dashboard Operacional:** IPE Badge dinâmico e Horizonte Preditivo de 12 meses.
+*   **Refatoração de Escala:** Migração concluída para **CSS Modules** para suporte a crescimento modular.
 
 ---
 
-## ⚙️ Fase 2: O Motor Preditivo (Backend & MLOps) - *[PRÓXIMO PASSO]*
-**Objetivo:** Substituir os dados *mockados* do frontend pelo modelo real de Machine Learning desenvolvido no artigo ECAI.
+## ⚙️ Fase 2: O Motor Nexus (Resiliência & IA Real) - *[CONCLUÍDO]*
+**Objetivo:** Substituir dados mockados por inferência LSTM real e ingestão de dados vivos.
 
-1.  **Arquitetura Base:**
-    *   Setup do **FastAPI** (Python) replicando o sucesso do projeto `load_analyzer`.
-    *   Banco de dados relacional (SQLite/PostgreSQL) para cache de predições e histórico.
-2.  **Pipeline Multi-NCM:**
-    *   Script de ingestão automática via API do **ComexStat**.
-    *   Adaptação do modelo **Micro-LSTM** para processar e prever de forma independente:
-        *   Soja (NCM 12019000)
-        *   Milho (NCM 10059010)
-        *   Arroz (NCM 10061092)
-3.  **Lógica do IPE:**
-    *   Algoritmo no backend para somar as previsões e calcular o IPE real baseado na capacidade cadastrada do Porto Seco.
+1.  **Arquitetura Base:** Setup de **FastAPI** com serviços desacoplados (`PredictorService`, `IPEEngine`).
+2.  **Ingestão Resiliente:** Coleta automática via API **ComexStat** com **Retry Logic & Exponential Backoff**.
+3.  **Pipeline de IA:** Rollout Recursivo de 12 meses via modelos Micro-LSTM reais e gestão via `model_registry.json`.
 
 ---
 
-## 📊 Fase 3: Inteligência Institucional (Data-as-a-Service)
-**Objetivo:** Estabelecer a empresa como autoridade em dados logísticos em Roraima, superando a barreira de acesso a dados públicos estaduais.
+## 📊 Fase 3: Inteligência Institucional (Data-as-a-Service) - *[CONCLUÍDO]*
+**Objetivo:** Estabelecer a empresa como autoridade em dados logísticos através de entregáveis tangíveis.
 
-*   **Geração de Relatórios PDF:** Módulo para exportar automaticamente o "Boletim Estratégico Mensal" com as previsões de gargalo.
-*   **Estratégia do "Cavalo de Troia":** Distribuir o Boletim gratuitamente para órgãos como Aprosoja e SEFAZ. O objetivo é provar a precisão do Micro-LSTM contra o "feeling" do mercado, forçando a abertura de dados internos dessas instituições para o seu sistema em troca de consultoria premium.
-*   **Auditoria de Confiança:** Tela no dashboard dedicada ao Analista de Dados, exibindo o RMSE, MAE e Teste de Diebold-Mariano provando a acurácia do modelo mês a mês.
+*   **Geração de Relatórios (Nexus Reporting):** Implementação server-side (WeasyPrint) do "Boletim Estratégico Mensal" em PDF.
+*   **Audit Trail:** Persistência em banco relacional (SQLite + SQLAlchemy + Alembic) para rastrear acurácia (`RMSE`, `MAE`) e logs de inferência.
+*   **Nexus API Public:** Documentação profissional via **ReDoc** e proteção via **API Keys** (`X-API-Key`).
+
+---
+
+## 🛠️ Fase 4: Refino & Hardening (Segurança e Arquitetura) - *[PRÓXIMO PASSO]*
+**Objetivo:** Eliminar débitos técnicos e blindar o sistema para produção real com parceiros externos.
+
+*   **Segurança de Credenciais:** Migrar API Keys do Frontend para variáveis de ambiente (`.env`) e implementar proxy reverso para ocultar chaves em chamadas internas.
+*   **Injeção de Dependência:** Refatorar o `PredictorService` para gerenciar sessões de banco via `Depends(get_db)`, evitando possíveis leaks de conexão.
+*   **Infraestrutura de Deploy:** Documentar e validar dependências de SO (`pango`, `cairo`, `gdk-pixbuf`) para garantir portabilidade do gerador de PDF.
 
 ---
 
-## 🌍 Fase 4: Expansão e Monitoramento Ativo (Longo Prazo)
-**Objetivo:** Tornar o ArcoNorte Nexus o sistema de navegação definitivo para o agronegócio do extremo norte.
+## 🌍 Fase 5: Expansão e Monitoramento Ativo (Longo Prazo)
+**Objetivo:** Tornar o ArcoNorte Nexus o sistema de navegação definitivo para o agronegócio.
 
-*   **Mapa de Fluxo (BR-174):** Visualização geoespacial do escoamento, como idealizado nos *UI Hints* da identidade visual.
-*   **Variáveis Exógenas Dinâmicas:** Alimentar a rede neural com dados climáticos (El Niño/La Niña) e status da rodovia (restrições de peso/obras) para refinar ainda mais a predição.
-*   **Integração ERP/YMS:** Conectar via API o ArcoNorte Nexus diretamente ao sistema de gestão de pátio (YMS) do Porto Seco para automação de agendamentos.
+*   **A Trinca de Grãos:** Inclusão de modelos preditivos para Milho (NCM 10059010) e Arroz (NCM 10061092).
+*   **Variáveis Exógenas:** Integração de dados climáticos (El Niño) e status de infraestrutura (BR-174).
+*   **Integração ERP/YMS:** Conexão direta com sistemas de pátio para automação de agendamentos.
 
 ---
-*Documento gerado como base estratégica para o desenvolvimento e comercialização do ArcoNorte Nexus. Dos dados ao movimento. Da previsão à decisão.*
+*Documento atualizado em 21 de Abril de 2026. Foco: Soja | Status: Fase 3 Completa.*
