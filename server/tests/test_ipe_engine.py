@@ -4,7 +4,7 @@ import unittest
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from api.services.ipe_engine import IPEEngine
+from server.services.ipe_engine import IPEEngine
 
 class TestIPEEngine(unittest.TestCase):
     def test_calculate_metrics_basic(self):

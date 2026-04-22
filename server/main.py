@@ -3,9 +3,9 @@ import os
 import json
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, Depends, Security
-from fastapi.responses import StreamingResponse
-from fastapi.security.api_key import APIKeyHeader, APIKey
-from fastapi.middleware.cors import CORSMiddleware
+from fastserver.responses import StreamingResponse
+from fastserver.security.api_key import APIKeyHeader, APIKey
+from fastserver.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -23,15 +23,15 @@ async def get_api_key(header_key: str = Security(api_key_header)):
         status_code=403, detail="Acesso negado: API Key inválida ou ausente."
     )
 
-# Adiciona o diretório raiz ao path para permitir imports de api.*
+# Adiciona o diretório raiz ao path para permitir imports de server.*
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from api.services.comex_service import get_latest_comex_data
-from api.services.predictor_service import PredictorService
-from api.services.ipe_engine import IPEEngine
-from api.services.reporting_service import ReportingService
-from api.db.database import get_db
-from api.db.models import InferenceLog, ModelEvaluation
+from server.services.comex_service import get_latest_comex_data
+from server.services.predictor_service import PredictorService
+from server.services.ipe_engine import IPEEngine
+from server.services.reporting_service import ReportingService
+from server.db.database import get_db
+from server.db.models import InferenceLog, ModelEvaluation
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 REGISTRY_PATH = os.path.join(BASE_DIR, "data", "model_registry.json")

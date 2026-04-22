@@ -10,12 +10,13 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import EarlyStopping
 
-from api.utils.crop_calendars import is_safra_ativa
+from server.utils.crop_calendars import is_safra_ativa
 
 # Configurações de Diretórios
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ARTIFACTS_DIR = os.path.join(BASE_DIR, "artifacts")
-REGISTRY_PATH = os.path.join(BASE_DIR, "data", "model_registry.json")
+SERVER_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(SERVER_DIR)
+ARTIFACTS_DIR = os.path.join(ROOT_DIR, "data", "models")
+REGISTRY_PATH = os.path.join(SERVER_DIR, "data", "model_registry.json")
 
 LOOKBACK = 3
 N_FEATURES = 3

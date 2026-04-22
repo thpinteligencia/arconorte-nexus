@@ -10,8 +10,8 @@ from alembic import context
 # Adiciona o diretório raiz do projeto ao sys.path para permitir imports da 'api'
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from api.db.models import Base
-from api.db.database import SQLALCHEMY_DATABASE_URL
+from server.db.models import Base
+from server.db.database import SQLALCHEMY_DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

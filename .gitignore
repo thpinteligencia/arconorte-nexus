@@ -6,9 +6,9 @@ dist-ssr/
 .idea/
 .DS_Store
 .aider*
-api/venv/
-api/data/*.json
-api/data/*.db
+server/venv/
+server/data/*.json
+server/data/*.db
 __pycache__/
 *.py[cod]
 *$py.class

@@ -6,14 +6,15 @@ import pandas as pd
 from tensorflow.keras.models import load_model
 from datetime import datetime, timedelta
 
-from api.utils.crop_calendars import is_safra_ativa
-from api.db.database import SessionLocal
-from api.db.models import InferenceLog
+from server.utils.crop_calendars import is_safra_ativa
+from server.db.database import SessionLocal
+from server.db.models import InferenceLog
 
 # Configurações de Caminhos
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REGISTRY_PATH = os.path.join(BASE_DIR, "data", "model_registry.json")
-ARTIFACTS_DIR = os.path.join(BASE_DIR, "artifacts")
+SERVER_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(SERVER_DIR)
+REGISTRY_PATH = os.path.join(SERVER_DIR, "data", "model_registry.json")
+ARTIFACTS_DIR = os.path.join(ROOT_DIR, "data", "models")
 
 LOOKBACK = 3
 N_FEATURES = 3 
