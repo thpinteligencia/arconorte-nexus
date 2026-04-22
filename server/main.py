@@ -3,11 +3,14 @@ import os
 import json
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, Depends, Security
-from fastserver.responses import StreamingResponse
-from fastserver.security.api_key import APIKeyHeader, APIKey
-from fastserver.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from fastapi.security import APIKeyHeader
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+
+# Tipo auxiliar para APIKey (FastAPI não exporta APIKey diretamente como tipo, é apenas uma string ou herança)
+APIKey = str
 
 # Configurações de Segurança
 API_KEY_NAME = "X-API-Key"
@@ -30,8 +33,11 @@ from server.services.comex_service import get_latest_comex_data
 from server.services.predictor_service import PredictorService
 from server.services.ipe_engine import IPEEngine
 from server.services.reporting_service import ReportingService
-from server.db.database import get_db
-from server.db.models import InferenceLog, ModelEvaluation
+from server.db.database import get_db, engine
+from server.db.models import Base, InferenceLog, ModelEvaluation
+
+# Criar tabelas se não existirem
+Base.metadata.create_all(bind=engine)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 REGISTRY_PATH = os.path.join(BASE_DIR, "data", "model_registry.json")

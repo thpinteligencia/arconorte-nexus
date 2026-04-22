@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 API_URL = "https://api-comexstat.mdic.gov.br/general"
-CACHE_PATH = "api/data/comex_cache.json"
+CACHE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "comex_cache.json")
 
 def _load_cache():
     if os.path.exists(CACHE_PATH):

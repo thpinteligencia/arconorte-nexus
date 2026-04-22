@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+requests
+pandas
+numpy
+tensorflow
+scikit-learn
+joblib
+weasyprint
+jinja2
+openpyxl
+alembic
+pytest
