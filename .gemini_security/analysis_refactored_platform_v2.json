@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0 (Refactored Glass)",
+  "sidebar_features": {
+    "branding": "Logo minimalista 'N' em box verde.",
+    "navigation": ["Dashboard", "Auditoria IA"],
+    "footer": "Configurações e Sair.",
+    "aesthetic": "Glassmorphism, transparências, bordas finas (rgba 255/0.08), visual futurista/limpo."
+  },
+  "technical_merit": "Extremamente modular, fácil de adicionar novos temas, utiliza variáveis CSS globais para tudo.",
+  "gaps": "Visualmente 'vazio' em comparação à anterior, falta de slogan e contexto institucional imediato."
+}

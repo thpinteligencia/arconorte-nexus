@@ -1,0 +1,112 @@
+.tutorialWrapper {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.tutorialCard {
+  width: 320px;
+  background: #1C1C1E;
+  border: 1px solid #34A853;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(52, 168, 83, 0.2);
+  pointer-events: all;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.stepIndicator {
+  font-size: 0.75rem;
+  color: #34A853;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.tutorialCard h3 {
+  margin: 0 0 0.5rem 0;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.tutorialCard p {
+  color: #8E8E93;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+}
+
+.nextBtn {
+  width: 100%;
+  background: #34A853;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.nextBtn:hover {
+  background: #2D8E47;
+  transform: translateY(-2px);
+}
+
+.skipBtn {
+  width: 100%;
+  background: transparent;
+  color: #8E8E93;
+  border: none;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: 0.2s;
+}
+
+.skipBtn:hover {
+  color: white;
+}
+
+.progressDots {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3A3A3C;
+}
+
+.activeDot {
+  background: #34A853;
+  box-shadow: 0 0 5px #34A853;
+}
+
+/* Efeito de Destaque para Elementos Alvo */
+:global(.tutorial-highlight) {
+  position: relative;
+  z-index: 1001 !important;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 20px 5px #34A853 !important;
+  pointer-events: all !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}

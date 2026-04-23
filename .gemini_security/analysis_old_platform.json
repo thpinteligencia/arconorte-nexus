@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0 (Legacy)",
+  "name": "Arco Norte Nexus - Prototype Phase",
+  "analysis": {
+    "features": [
+      "Simulador de escoamento de soja com sliders básicos.",
+      "Gauge visual de pressão logística customizado via transform/rotate.",
+      "Gráfico de área simples via Recharts para horizonte preditivo.",
+      "Painel de auditoria inicial focado em métricas RMSE/MAE.",
+      "Tutorial Overlay acoplado a IDs genéricos (welcome, header, etc)."
+    ],
+    "architecture": {
+      "styling": "CSS Global (provavelmente nexus-card, card) com algumas inline styles.",
+      "state_management": "Prop drilling intenso (App -> SimulatorPanel -> Sliders).",
+      "component_structure": "Componentes de classe ou funcionais básicos sem hooks avançados de performance.",
+      "visual_identity": "Cores fixas (#34A853) e bordas sólidas, estilo dashboard clássico."
+    },
+    "why_it_worked": "Funcionava porque entregava o valor core (simulação) de forma direta, apesar da rigidez visual e da dificuldade de manutenção devido ao CSS global e falta de abstrações de UI consistentes."
+  }
+}

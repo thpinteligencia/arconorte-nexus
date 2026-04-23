@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0 (Legacy Visual)",
+  "sidebar_features": {
+    "branding": "Logo 'AN' estilizada, 'ARCONORTE NEXUS' em caixa alta com destaque em 'NEXUS'.",
+    "navigation": ["Painel de Controle", "Simulação Nexus", "Auditoria ComexStat", "Relatórios Estratégicos"],
+    "footer": "Identificação do local (Porto Seco) e versão (v1.3).",
+    "aesthetic": "Uso de cores sólidas e profundas (#1C1C1E, #34A853), tipografia com pesos variados para hierarquia clara."
+  },
+  "visual_feel": "Mais denso em informações, passava uma sensação de ferramenta industrial/logística robusta."
+}

@@ -1,52 +1,95 @@
 .nexusContainer {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  background-color: var(--bg-deep);
 }
 
 .nexusMain {
   flex: 1;
-  padding: 3rem;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .nexusContent {
-  transition: 0.3s;
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .nexusGridMain {
   display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
-.loadingState {
-  opacity: 0.5;
-  pointer-events: none;
-  filter: blur(1px);
+@media (min-width: 1200px) {
+  .nexusGridMain {
+    grid-template-columns: 380px 1fr;
+    align-items: start;
+  }
+}
+
+.dashboardHeader {
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.dashboardHeader h2 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.dashboardHeader p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Estados de Carregamento */
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 12, 14, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  border-radius: 16px;
+  animation: fadeIn 0.2s ease-in;
 }
 
 .errorBanner {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid var(--danger);
-  color: var(--danger);
-  padding: 1rem;
+  color: #FF8080;
+  padding: 1rem 1.5rem;
   border-radius: 12px;
   margin-bottom: 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .errorBanner button {
   background: var(--danger);
   color: white;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 0.8rem;
-  margin-left: auto;
+  transition: all 0.2s;
+}
+
+.errorBanner button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }

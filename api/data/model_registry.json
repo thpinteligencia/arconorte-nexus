@@ -1,0 +1,28 @@
+{
+  "12019000": {
+    "14": {
+      "model_path": "soy_rr_model.keras",
+      "scaler_path": "soy_rr_scaler.pkl",
+      "status": "active",
+      "max_tons_sanity": 80000
+    },
+    "13": {
+      "model_path": "model_12019000_13.keras",
+      "scaler_path": "scaler_12019000_13.pkl",
+      "status": "active",
+      "max_tons_sanity": 150000
+    },
+    "15": {
+      "model_path": "model_12019000_15.keras",
+      "scaler_path": "scaler_12019000_15.pkl",
+      "status": "active",
+      "max_tons_sanity": 500000
+    },
+    "51": {
+      "model_path": "model_12019000_51.keras",
+      "scaler_path": "scaler_12019000_51.pkl",
+      "status": "active",
+      "max_tons_sanity": 1200000
+    }
+  }
+}

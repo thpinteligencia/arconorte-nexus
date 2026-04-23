@@ -1,87 +1,139 @@
 import React from 'react';
-import { Activity, FileDown } from 'lucide-react';
+import { Download, RefreshCw, Ship, MapPin, Database } from 'lucide-react';
+import { UFS_NAMES } from '../../constants';
 
 interface SimulatorPanelProps {
+  selectedUf: string;
+  setSelectedUf: (uf: string) => void;
+  availableUfs: string[];
   volSoja: number;
-  setVolSoja: (val: number) => void;
+  setVolSoja: (vol: number) => void;
   capacidadePorto: number;
-  setCapacidadePorto: (val: number) => void;
-  onDownloadReport: () => void;
+  setCapacidadePorto: (cap: number) => void;
+  onDownload: () => void;
   isDownloading: boolean;
 }
 
 const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
+  selectedUf,
+  setSelectedUf,
+  availableUfs,
   volSoja,
   setVolSoja,
   capacidadePorto,
   setCapacidadePorto,
-  onDownloadReport,
+  onDownload,
   isDownloading
 }) => {
-  const handleReset = () => {
-    setVolSoja(1);
-    setCapacidadePorto(70000);
-  };
-
   return (
-    <div className="sidebar-simulator">
-      <div className="sim-header">
-        <Activity size={16} /> <span>Parâmetros Operacionais</span>
+    <aside className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+        <RefreshCw size={20} color="var(--primary)" />
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Simulador Nexus</h3>
       </div>
-      <div className="sim-control">
-        <div className="label-row">
-          <span>Soja (Multiplicador)</span> <span>{Math.round(volSoja * 100)}%</span>
+
+      {/* UF Selector */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <MapPin size={14} /> Origem da Produção (UF)
+        </label>
+        <select 
+          value={selectedUf} 
+          onChange={(e) => setSelectedUf(e.target.value)}
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid var(--border-thin)',
+            borderRadius: '8px',
+            color: 'white',
+            padding: '0.75rem',
+            outline: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {availableUfs.map(uf => (
+            <option key={uf} value={uf} style={{ background: '#1c1c1e' }}>
+              {UFS_NAMES[uf as keyof typeof UFS_NAMES] || uf}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Volume Soja Slider */}
+      <div id="tutorial-vol-slider" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <Database size={14} /> Safra (Multiplicador)
+          </label>
+          <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--primary)' }}>{volSoja}x</span>
         </div>
         <input 
           type="range" 
           min="0.5" 
-          max="3.0" 
+          max="2.0" 
           step="0.1" 
           value={volSoja} 
-          onChange={(e) => setVolSoja(parseFloat(e.target.value))} 
+          onChange={(e) => setVolSoja(parseFloat(e.target.value))}
+          style={{ accentColor: 'var(--primary)', cursor: 'pointer' }}
         />
       </div>
-      <div className="sim-control">
-        <div className="label-row">
-          <span>Capacidade Terminal</span> <span>{Math.round(capacidadePorto / 1000)}k t</span>
+
+      {/* Capacidade Slider */}
+      <div id="tutorial-cap-slider" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <Ship size={14} /> Capacidade Porto (Tons)
+          </label>
+          <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--secondary)' }}>
+            {(capacidadePorto/1000).toFixed(0)}k
+          </span>
         </div>
         <input 
           type="range" 
-          min="20000" 
-          max="500000" 
-          step="10000" 
+          min="10000" 
+          max="200000" 
+          step="5000" 
           value={capacidadePorto} 
-          onChange={(e) => setCapacidadePorto(parseInt(e.target.value))} 
+          onChange={(e) => setCapacidadePorto(parseInt(e.target.value))}
+          style={{ accentColor: 'var(--secondary)', cursor: 'pointer' }}
         />
       </div>
-      <div className="sim-footer" style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-        <button className="btn-reset" onClick={handleReset}>
-          Resetar
-        </button>
-        <button 
-          className="btn-download" 
-          onClick={onDownloadReport}
-          disabled={isDownloading}
-          style={{
-            background: 'var(--verde-soja)',
-            color: 'white',
-            border: 'none',
-            padding: '0.6rem 1rem',
-            borderRadius: '8px',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            opacity: isDownloading ? 0.5 : 1
-          }}
-        >
-          <FileDown size={14} />
-          {isDownloading ? 'Gerando...' : 'Gerar Boletim'}
-        </button>
-      </div>
-    </div>
+
+      <div style={{ flex: 1 }} />
+
+      {/* Botão de Download */}
+      <button 
+        id="tutorial-report-btn"
+        onClick={onDownload}
+        disabled={isDownloading}
+        style={{
+          background: 'var(--grad-nexus)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '1rem',
+          fontWeight: 800,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.75rem',
+          cursor: isDownloading ? 'not-allowed' : 'pointer',
+          transition: 'all 0.2s',
+          opacity: isDownloading ? 0.7 : 1,
+          boxShadow: 'var(--grad-glow)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+      >
+        {isDownloading ? (
+          <RefreshCw className="animate-spin" size={20} />
+        ) : (
+          <Download size={20} />
+        )}
+        {isDownloading ? 'Gerando...' : 'Exportar Boletim PDF'}
+      </button>
+    </aside>
   );
 };
 
