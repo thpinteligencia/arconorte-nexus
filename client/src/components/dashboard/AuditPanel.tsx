@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, History, BarChart3, Clock } from 'lucide-react';
+import { MOCK_AUDIT } from '../../utils/mockData';
 
 const AuditPanel = () => {
   const [auditData, setAuditData] = useState<any>(null);
@@ -7,14 +8,18 @@ const AuditPanel = () => {
 
   useEffect(() => {
     fetch('/api/v1/audit/metrics', {
-      headers: { 'X-API-Key': 'nexus_dev_2026' }
+      headers: { 'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026' }
     })
       .then(res => res.json())
       .then(data => {
         setAuditData(data);
         setLoading(false);
       })
-      .catch(err => console.error("Erro ao carregar auditoria", err));
+      .catch(err => {
+        console.warn("⚠️ Usando auditoria mockada");
+        setAuditData(MOCK_AUDIT);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) return <div style={{ color: '#636366' }}>Carregando trilha de auditoria...</div>;

@@ -16,8 +16,9 @@ APIKey = str
 API_KEY_NAME = "X-API-Key"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
-# Chaves de parceiros (Exemplo: SEFAZ, Aprosoja)
-VALID_API_KEYS = ["nexus_dev_2026", "sefaz_rr_partner", "aprosoja_rr_nexus"]
+# Chaves carregadas de variáveis de ambiente com fallback para dev
+ENV_KEYS = os.environ.get("NEXUS_API_KEYS", "nexus_dev_2026,sefaz_rr_partner,aprosoja_rr_nexus")
+VALID_API_KEYS = [key.strip() for key in ENV_KEYS.split(",")]
 
 async def get_api_key(header_key: str = Security(api_key_header)):
     if header_key in VALID_API_KEYS:
@@ -77,8 +78,28 @@ except Exception as e:
     predictor = None
 
 @app.get("/api/v1/status")
-def get_status():
-    return {"status": "operational", "model_loaded": predictor is not None}
+def get_status(db: Session = Depends(get_db)):
+    # Verificar Banco
+    db_ok = False
+    try:
+        db.execute("SELECT 1")
+        db_ok = True
+    except:
+        pass
+
+    # Caminho de modelos (importado de predictor_service se necessário, ou recalculado)
+    from server.services.predictor_service import ARTIFACTS_DIR
+    models_dir_ok = os.path.exists(ARTIFACTS_DIR)
+    
+    return {
+        "status": "operational" if (db_ok and predictor) else "degraded",
+        "components": {
+            "ia_engine": predictor is not None,
+            "database": db_ok,
+            "storage_models": models_dir_ok
+        },
+        "version": "2.1.0-demo"
+    }
 
 @app.get("/api/v1/registry")
 def get_registry(api_key: APIKey = Depends(get_api_key)):

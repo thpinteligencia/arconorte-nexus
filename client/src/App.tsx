@@ -8,7 +8,8 @@ import SimulatorPanel from './components/dashboard/SimulatorPanel';
 import AuditPanel from './components/dashboard/AuditPanel';
 import { UFS_NAMES } from './constants';
 import { PredictionData } from './types';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { MOCK_PREDICTIONS, MOCK_REGISTRY } from './utils/mockData';
+import { AlertCircle, Loader2, ZapOff } from 'lucide-react';
 import styles from './App.module.css';
 
 const App = () => {
@@ -47,18 +48,23 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isMocking, setIsMocking] = useState(false);
 
   // --- Busca de Registro (Disponibilidade) ---
   useEffect(() => {
     fetch('/api/v1/registry', {
-      headers: { 'X-API-Key': 'nexus_dev_2026' }
+      headers: { 'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026' }
     })
       .then(res => res.json())
       .then(registry => {
         const ufs = Object.keys(registry["12019000"] || {});
         if (ufs.length > 0) setAvailableUfs(ufs);
       })
-      .catch(() => console.error("Falha ao carregar registro de modelos"));
+      .catch(() => {
+        console.warn("⚠️ Usando registro mockado");
+        const ufs = Object.keys(MOCK_REGISTRY["12019000"]);
+        setAvailableUfs(ufs);
+      });
   }, []);
 
   // --- Busca de Predições (Debounced logic) ---
@@ -70,7 +76,7 @@ const App = () => {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'X-API-Key': 'nexus_dev_2026'
+          'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026'
         },
         body: JSON.stringify({
           uf: selectedUf,
@@ -82,8 +88,12 @@ const App = () => {
       if (!response.ok) throw new Error('Falha na resposta do motor Nexus');
       const result = await response.json();
       setData(result);
+      setIsMocking(false);
     } catch (err: any) {
-      setError(err.message || 'Erro de conexão com o backend');
+      console.warn("⚠️ Ativando modo de simulação (Mock Fallback)");
+      setData(MOCK_PREDICTIONS as any);
+      setIsMocking(true);
+      // setError(err.message || 'Erro de conexão com o backend');
     } finally {
       setIsLoading(false);
     }
@@ -101,7 +111,7 @@ const App = () => {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'X-API-Key': 'nexus_dev_2026'
+          'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026'
         },
         body: JSON.stringify({
           uf: selectedUf,
@@ -155,7 +165,26 @@ const App = () => {
           {activeTab === 'dashboard' ? (
             <div className="animate-fade">
               <header className={styles.dashboardHeader}>
-                <h2>Dashboard de Inteligência</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <h2>Dashboard de Inteligência</h2>
+                  {isMocking && (
+                    <div style={{ 
+                      background: 'rgba(241, 196, 15, 0.1)', 
+                      color: 'var(--accent)', 
+                      padding: '0.2rem 0.6rem', 
+                      borderRadius: '6px', 
+                      fontSize: '0.65rem',
+                      fontWeight: 800,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      border: '1px solid rgba(241, 196, 15, 0.2)',
+                      textTransform: 'uppercase'
+                    }}>
+                      <ZapOff size={12} /> Modo Simulação
+                    </div>
+                  )}
+                </div>
                 <p>Análise preditiva de escoamento e pressão logística para o Arco Norte.</p>
               </header>
 
