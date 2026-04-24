@@ -43,6 +43,16 @@ const STEPS: TutorialStep[] = [
     title: "Auditoria e Confiança",
     description: "Mude para a aba de Auditoria para ver o 'DNA' da IA e logs de precisão (RMSE/MAE).",
     target: "tutorial-audit-tab"
+  },
+  {
+    title: "Acurácia dos Modelos",
+    description: "Aqui monitoramos a performance real da IA. O MAE (Mean Absolute Error) mostra a margem média de erro em toneladas.",
+    target: "audit-accuracy"
+  },
+  {
+    title: "Transparência Total",
+    description: "Cada simulação feita no Nexus é registrada aqui. Isso garante a rastreabilidade e integridade das decisões logísticas.",
+    target: "audit-logs"
   }
 ];
 

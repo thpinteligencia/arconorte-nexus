@@ -29,7 +29,7 @@ const AuditPanel = () => {
     <div className="audit-panel">
       <div className="audit-grid">
         {/* Métricas de Acurácia */}
-        <div className="card">
+        <div id="audit-accuracy" className="card">
           <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
             <div className="nexus-icon-framed active">
               <IconAudit size={18} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
@@ -64,7 +64,7 @@ const AuditPanel = () => {
         </div>
 
         {/* Estatísticas Gerais */}
-        <div className="card">
+        <div id="audit-stats" className="card">
           <div className="card-header">
             <h3><BarChart3 size={18} /> Estatísticas Nexus</h3>
           </div>
@@ -78,7 +78,7 @@ const AuditPanel = () => {
       </div>
 
       {/* Logs Recentes */}
-      <div className="card" style={{ marginTop: '2rem' }}>
+      <div id="audit-logs" className="card" style={{ marginTop: '2rem' }}>
         <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
           <div className="nexus-icon-framed">
             <History size={18} className="nexus-icon nexus-icon-bicolor" />

@@ -1,0 +1,54 @@
+{
+  "project": "ArcoNorte Nexus",
+  "document_type": "Data Migration Plan",
+  "version": "1.0.0",
+  "source_db": "SQLite",
+  "target_db": "PostgreSQL 16+",
+  "phases": [
+    {
+      "step": 1,
+      "name": "Infraestrutura e Provisionamento",
+      "actions": [
+        "Provisionar instância PostgreSQL (AWS RDS ou Docker Dedicado)",
+        "Configurar parâmetros de segurança (VPC, Security Groups)",
+        "Criar database 'arconorte_nexus' e usuário com privilégios limitados"
+      ]
+    },
+    {
+      "step": 2,
+      "name": "Sincronização de Esquema",
+      "actions": [
+        "Atualizar string de conexão no server/db/database.py para usar psycopg2",
+        "Configurar Alembic para suportar dialetos PostgreSQL",
+        "Executar 'alembic upgrade head' para criar tabelas, índices e constraints no alvo"
+      ]
+    },
+    {
+      "step": 3,
+      "name": "Extração e Transformação (ETL)",
+      "actions": [
+        "Extrair dados do SQLite para arquivos JSON/CSV temporários",
+        "Tratar tipos de dados incompatíveis (ex: formatos de data, booleanos)",
+        "Validar integridade referencial antes da carga"
+      ]
+    },
+    {
+      "step": 4,
+      "name": "Carga de Dados e Validação",
+      "actions": [
+        "Importar dados via scripts Python (SQLAlchemy) ou comando COPY do Postgres",
+        "Executar queries de conferência (Row count match, Sum verification)",
+        "Validar performance dos índices criados pelo Database Admin"
+      ]
+    },
+    {
+      "step": 5,
+      "name": "Cutover e Monitoramento",
+      "actions": [
+        "Apontar aplicação para o novo endpoint de banco",
+        "Monitorar logs de erro via Sentry",
+        "Manter SQLite como backup read-only por 7 dias"
+      ]
+    }
+  ]
+}

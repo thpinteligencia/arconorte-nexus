@@ -22,7 +22,10 @@ const App = () => {
   });
 
   const handleNextStep = () => {
-    if (tutorialStep < 6) {
+    if (tutorialStep < 8) {
+      if (tutorialStep === 6) {
+        setActiveTab('audit');
+      }
       setTutorialStep(prev => prev + 1);
     } else {
       setIsTutorialActive(false);
@@ -30,11 +33,19 @@ const App = () => {
     }
   };
 
+  const handleRestartTutorial = () => {
+    setTutorialStep(0);
+    setActiveTab('dashboard');
+    setIsTutorialActive(true);
+    localStorage.removeItem('nexus_tutorial_completed');
+  };
+
   useEffect(() => {
     (window as any).finishTutorial = () => {
       setIsTutorialActive(false);
       localStorage.setItem('nexus_tutorial_completed', 'true');
     };
+    (window as any).restartTutorial = handleRestartTutorial;
   }, []);
 
   // --- Estados do Simulador ---
@@ -240,7 +251,11 @@ const App = () => {
 
   return (
     <div id="tutorial-welcome" className={styles.nexusContainer}>
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        onRestartTutorial={handleRestartTutorial}
+      />
       
       <main className={styles.nexusMain}>
         <Header 

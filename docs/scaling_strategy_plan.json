@@ -1,0 +1,40 @@
+{
+  "project": "ArcoNorte Nexus",
+  "document_type": "Scaling Strategy",
+  "version": "1.0.0",
+  "objectives": [
+    "Suportar 100+ usuários corporativos simultâneos",
+    "Reduzir latência de inferência para <200ms",
+    "Implementar alta disponibilidade (99.9% uptime)"
+  ],
+  "roadmap": {
+    "short_term": {
+      "focus": "Contêineres e Cache",
+      "tasks": [
+        "Dockerização total (Frontend + Backend + ML Worker)",
+        "Implementação de Redis para cache de resultados do IPE Engine",
+        "Centralização de Logs e Monitoramento (Sentry + Prometheus)"
+      ]
+    },
+    "mid_term": {
+      "focus": "IA Desacoplada e Async",
+      "tasks": [
+        "Migração para TensorFlow Serving para servir modelos (.keras)",
+        "Introdução de Celery + RabbitMQ para tarefas de exportação de relatórios pesados",
+        "Setup de CI/CD (GitHub Actions) com testes automatizados de regressão de IA"
+      ]
+    },
+    "long_term": {
+      "focus": "Distribuição Global e DaaS",
+      "tasks": [
+        "Implementação de Multi-tenancy (isolamento por parceiro/SEFAZ)",
+        "Exposição de API Pública via API Gateway (DaaS Model)",
+        "Distribuição via CDN para redução de latência no frontend"
+      ]
+    }
+  },
+  "stack_evolution": {
+    "current": "SQLite, FastAPI (Sync), Keras (In-memory)",
+    "target": "PostgreSQL, FastAPI (Async), Redis, TF Serving, Docker Swarm/K8s"
+  }
+}

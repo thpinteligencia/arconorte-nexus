@@ -2,16 +2,18 @@ import React from 'react';
 import { 
   Settings, 
   LogOut, 
-  Globe
+  Globe,
+  HelpCircle
 } from 'lucide-react';
 import { IconDashboard, IconFluxo, IconAudit, IconReport } from '../common/NexusIcons';
 
 interface SidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  onRestartTutorial: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onRestartTutorial }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Painel de Controle', icon: IconDashboard },
     { id: 'simulacao', label: 'Simulação Nexus', icon: IconFluxo },
@@ -150,6 +152,25 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <button 
+            onClick={onRestartTutorial}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.75rem', 
+              padding: '0.6rem 1rem', 
+              background: 'transparent', 
+              border: 'none', 
+              color: 'var(--text-dim)', 
+              fontSize: '0.85rem', 
+              cursor: 'pointer',
+              borderRadius: '8px'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-main)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-dim)'}
+          >
+            <HelpCircle size={16} /> Reiniciar Tutorial
+          </button>
           <button style={{ 
             display: 'flex', 
             alignItems: 'center', 
