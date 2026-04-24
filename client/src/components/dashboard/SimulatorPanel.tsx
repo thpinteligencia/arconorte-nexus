@@ -1,6 +1,7 @@
 import React from 'react';
-import { Download, RefreshCw, Ship, MapPin, Database } from 'lucide-react';
+import { Download, RefreshCw, MapPin } from 'lucide-react';
 import { UFS_NAMES } from '../../constants';
+import { IconSoja, IconSilo } from '../common/NexusIcons';
 
 interface SimulatorPanelProps {
   selectedUf: string;
@@ -68,7 +69,7 @@ const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <div className="nexus-icon-wrapper">
-              <Database size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
+              <IconSoja size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
             </div>
             Safra (Multiplicador)
           </label>
@@ -90,7 +91,7 @@ const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <div className="nexus-icon-wrapper">
-              <Ship size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-secondary" />
+              <IconSilo size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-secondary" />
             </div>
             Capacidade Porto (Tons)
           </label>

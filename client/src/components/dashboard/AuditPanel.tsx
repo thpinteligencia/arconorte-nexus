@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, History, BarChart3, Clock } from 'lucide-react';
+import { History, BarChart3, Clock } from 'lucide-react';
 import { MOCK_AUDIT } from '../../utils/mockData';
+import { IconAudit } from '../common/NexusIcons';
 
 const AuditPanel = () => {
   const [auditData, setAuditData] = useState<any>(null);
@@ -31,7 +32,7 @@ const AuditPanel = () => {
         <div className="card">
           <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
             <div className="nexus-icon-framed active">
-              <ShieldCheck size={18} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
+              <IconAudit size={18} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
             </div>
             <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Acurácia dos Modelos</h3>
           </div>

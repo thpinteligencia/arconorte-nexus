@@ -18,7 +18,7 @@ const App = () => {
   // --- Estados do Tutorial ---
   const [tutorialStep, setTutorialStep] = useState(0);
   const [isTutorialActive, setIsTutorialActive] = useState(() => {
-    return !localStorage.getItem('nexus_tutorial_completed');
+    return localStorage.getItem('nexus_tutorial_completed') !== 'true';
   });
 
   const handleNextStep = () => {
@@ -120,22 +120,121 @@ const App = () => {
         })
       });
       
-      if (!response.ok) throw new Error('Falha ao gerar boletim');
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Falha ao gerar boletim');
+      }
       
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(pdfBlob);
+      
       const a = document.createElement('a');
+      a.style.display = 'none';
       a.href = url;
       const ufName = UFS_NAMES[selectedUf as keyof typeof UFS_NAMES] || selectedUf;
       a.download = `Boletim_Nexus_${ufName}.pdf`;
       document.body.appendChild(a);
       a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
+      
+      // Cleanup imediato
+      setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 100);
     } catch (err: any) {
+      console.error("Erro no download:", err);
       alert("Erro ao baixar relatório: " + err.message);
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+      case 'simulacao':
+        return (
+          <div className="animate-fade">
+            <header className={styles.dashboardHeader}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <h2>{activeTab === 'dashboard' ? 'Painel de Controle' : 'Simulador Estratégico'}</h2>
+                {isMocking && (
+                  <div style={{ 
+                    background: 'rgba(241, 196, 15, 0.1)', 
+                    color: 'var(--accent)', 
+                    padding: '0.2rem 0.6rem', 
+                    borderRadius: '6px', 
+                    fontSize: '0.65rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    border: '1px solid rgba(241, 196, 15, 0.2)',
+                    textTransform: 'uppercase'
+                  }}>
+                    <ZapOff size={12} /> Modo Simulação
+                  </div>
+                )}
+              </div>
+              <p>Análise preditiva de escoamento e pressão logística para o Arco Norte.</p>
+            </header>
+
+            <div className={styles.nexusGridMain}>
+              <SimulatorPanel 
+                selectedUf={selectedUf}
+                setSelectedUf={setSelectedUf}
+                availableUfs={availableUfs}
+                volSoja={volSoja}
+                setVolSoja={setVolSoja}
+                capacidadePorto={capacidadePorto}
+                setCapacidadePorto={setCapacidadePorto}
+                onDownload={handleDownloadReport}
+                isDownloading={isDownloading}
+              />
+              
+              <div style={{ position: 'relative' }}>
+                {isLoading && (
+                  <div className={styles.loadingOverlay}>
+                    <Loader2 className="animate-spin" size={40} color="var(--primary)" />
+                  </div>
+                )}
+                
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  <IpeCard 
+                    ipe={data?.overallIPE || 0} 
+                    pico={data?.picoTotal || 0}
+                    uf={UFS_NAMES[selectedUf as keyof typeof UFS_NAMES] || selectedUf}
+                  />
+                  <PredictionChart data={data?.chartData || []} />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'audit':
+        return <AuditPanel />;
+      case 'reports':
+        return (
+          <div className="animate-fade" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <header className={styles.dashboardHeader}>
+              <h2>Relatórios Estratégicos</h2>
+            </header>
+            <div className="glass-card" style={{ padding: '4rem', marginTop: '2rem' }}>
+              <p>Módulo de relatórios consolidados em desenvolvimento.</p>
+              <button 
+                onClick={handleDownloadReport} 
+                className={styles.nextBtn} 
+                style={{ marginTop: '1.5rem', padding: '0.8rem 2rem' }}
+                disabled={isDownloading}
+              >
+                {isDownloading ? 'Gerando...' : 'Gerar Boletim Situacional (PDF)'}
+              </button>
+            </div>
+          </div>
+        );
+      default:
+        return <div>Em construção...</div>;
     }
   };
 
@@ -161,67 +260,7 @@ const App = () => {
               <button onClick={() => fetchPredictions()}>Tentar Novamente</button>
             </div>
           )}
-
-          {activeTab === 'dashboard' ? (
-            <div className="animate-fade">
-              <header className={styles.dashboardHeader}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <h2>Dashboard de Inteligência</h2>
-                  {isMocking && (
-                    <div style={{ 
-                      background: 'rgba(241, 196, 15, 0.1)', 
-                      color: 'var(--accent)', 
-                      padding: '0.2rem 0.6rem', 
-                      borderRadius: '6px', 
-                      fontSize: '0.65rem',
-                      fontWeight: 800,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      border: '1px solid rgba(241, 196, 15, 0.2)',
-                      textTransform: 'uppercase'
-                    }}>
-                      <ZapOff size={12} /> Modo Simulação
-                    </div>
-                  )}
-                </div>
-                <p>Análise preditiva de escoamento e pressão logística para o Arco Norte.</p>
-              </header>
-
-              <div className={styles.nexusGridMain}>
-                <SimulatorPanel 
-                  selectedUf={selectedUf}
-                  setSelectedUf={setSelectedUf}
-                  availableUfs={availableUfs}
-                  volSoja={volSoja}
-                  setVolSoja={setVolSoja}
-                  capacidadePorto={capacidadePorto}
-                  setCapacidadePorto={setCapacidadePorto}
-                  onDownload={handleDownloadReport}
-                  isDownloading={isDownloading}
-                />
-                
-                <div style={{ position: 'relative' }}>
-                  {isLoading && (
-                    <div className={styles.loadingOverlay}>
-                      <Loader2 className="animate-spin" size={40} color="var(--primary)" />
-                    </div>
-                  )}
-                  
-                  <div style={{ display: 'grid', gap: '1.5rem' }}>
-                    <IpeCard 
-                      ipe={data?.overallIPE || 0} 
-                      pico={data?.picoTotal || 0}
-                      uf={UFS_NAMES[selectedUf as keyof typeof UFS_NAMES] || selectedUf}
-                    />
-                    <PredictionChart data={data?.chartData || []} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <AuditPanel />
-          )}
+          {renderContent()}
         </div>
       </main>
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Gauge, TrendingUp, AlertTriangle } from 'lucide-react';
+import { TrendingUp, AlertTriangle } from 'lucide-react';
+import { IconGauge } from '../common/NexusIcons';
 
 interface IpeCardProps {
   ipe: number;
@@ -109,7 +110,7 @@ const IpeCard: React.FC<IpeCardProps> = ({ ipe, pico, uf }) => {
             <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)', fontWeight: 600 }}>CONFIANÇA IA</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '2px' }}>
               <div className="nexus-icon-wrapper">
-                <Gauge size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-secondary" />
+                <IconGauge size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-secondary" />
               </div>
               <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)' }}>98.4<span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--text-muted)' }}>%</span></strong>
             </div>

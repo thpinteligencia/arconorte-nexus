@@ -1,14 +1,10 @@
 import React from 'react';
 import { 
-  LayoutDashboard, 
-  ShieldCheck, 
-  Zap, 
-  FileText, 
   Settings, 
   LogOut, 
-  ChevronRight,
   Globe
 } from 'lucide-react';
+import { IconDashboard, IconFluxo, IconAudit, IconReport } from '../common/NexusIcons';
 
 interface SidebarProps {
   activeTab: string;
@@ -17,10 +13,10 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
   const menuItems = [
-    { id: 'dashboard', label: 'Painel de Controle', icon: LayoutDashboard },
-    { id: 'simulacao', label: 'Simulação Nexus', icon: Zap },
-    { id: 'audit', label: 'Auditoria ComexStat', icon: ShieldCheck },
-    { id: 'reports', label: 'Relatórios Estratégicos', icon: FileText },
+    { id: 'dashboard', label: 'Painel de Controle', icon: IconDashboard },
+    { id: 'simulacao', label: 'Simulação Nexus', icon: IconFluxo },
+    { id: 'audit', label: 'Auditoria ComexStat', icon: IconAudit },
+    { id: 'reports', label: 'Relatórios Estratégicos', icon: IconReport },
   ];
 
   return (

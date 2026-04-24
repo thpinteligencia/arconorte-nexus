@@ -54,6 +54,7 @@ interface TutorialOverlayProps {
 
 const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ currentStep, onNext, isActive }) => {
   useEffect(() => {
+    console.log("Tutorial Status:", { isActive, currentStep });
     if (!isActive) {
       document.querySelectorAll('.tutorial-highlight').forEach(el => {
         el.classList.remove('tutorial-highlight');
@@ -63,6 +64,7 @@ const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ currentStep, onNext, 
 
     const step = STEPS[currentStep];
     if (step && step.target) {
+      console.log("Highlighting target:", step.target);
       document.querySelectorAll('.tutorial-highlight').forEach(el => {
         el.classList.remove('tutorial-highlight');
       });
@@ -70,7 +72,8 @@ const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ currentStep, onNext, 
       const targetEl = document.getElementById(step.target);
       if (targetEl) {
         targetEl.classList.add('tutorial-highlight');
-        // targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        console.warn("Target element not found:", step.target);
       }
     }
   }, [currentStep, isActive]);
