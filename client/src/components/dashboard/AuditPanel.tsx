@@ -29,9 +29,13 @@ const AuditPanel = () => {
       <div className="audit-grid">
         {/* Métricas de Acurácia */}
         <div className="card">
-          <div className="card-header">
-            <h3><ShieldCheck size={18} /> Acurácia dos Modelos</h3>
+          <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <div className="nexus-icon-framed active">
+              <ShieldCheck size={18} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
+            </div>
+            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Acurácia dos Modelos</h3>
           </div>
+
           <div className="eval-list">
             {auditData?.evaluations?.length > 0 ? (
               auditData.evaluations.map((ev: any) => (
@@ -74,8 +78,11 @@ const AuditPanel = () => {
 
       {/* Logs Recentes */}
       <div className="card" style={{ marginTop: '2rem' }}>
-        <div className="card-header">
-          <h3><History size={18} /> Logs de Inferência Recentes</h3>
+        <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div className="nexus-icon-framed">
+            <History size={18} className="nexus-icon nexus-icon-bicolor" />
+          </div>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Logs de Inferência Recentes</h3>
         </div>
         <div className="logs-table-wrapper">
           <table className="logs-table">

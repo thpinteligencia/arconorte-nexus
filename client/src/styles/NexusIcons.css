@@ -1,0 +1,63 @@
+/* =========================================
+   NEXUS ICON DESIGN SYSTEM (Arconorte v7)
+   Reforço Visual Agressivo
+   ========================================= */
+
+.nexus-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nexus-icon {
+  stroke-width: 2px !important; /* Traço mais grosso como na imagem */
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+}
+
+/* Forçar Cor Esmeralda Nexus 7 em ícones Ativos */
+.nexus-icon-active .nexus-icon {
+  color: #2ECC71 !important; /* Esmeralda exato da imagem */
+  filter: drop-shadow(0 0 12px rgba(46, 204, 113, 0.6)) !important;
+  stroke-width: 2.5px !important;
+}
+
+/* Moldura Chanfrada (Estilo Tech-Frame do Branding) */
+.nexus-icon-framed {
+  background: rgba(46, 204, 113, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px; /* Cantos menos arredondados, mais industrial */
+  position: relative;
+  overflow: hidden;
+}
+
+.nexus-icon-framed::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 4px;
+  border-top: 1px solid var(--primary);
+  border-left: 1px solid var(--primary);
+}
+
+.nexus-icon-framed.active {
+  border-color: rgba(46, 204, 113, 0.4);
+  background: rgba(46, 204, 113, 0.08);
+  box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.1);
+}
+
+/* Animação de Scanline (Efeito Monitor) */
+.nexus-icon-processing::after {
+  content: "";
+  position: absolute;
+  top: -100%; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(46, 204, 113, 0.2), transparent);
+  animation: scanline 2s infinite linear;
+}
+
+@keyframes scanline {
+  0% { top: -100%; }
+  100% { top: 100%; }
+}

@@ -48,7 +48,9 @@ const Header: React.FC<HeaderProps> = ({
             gap: '0.4rem',
             marginBottom: '0.4rem'
           }}>
-            <Map size={14} /> Corredor Logístico
+            <div className="nexus-icon-wrapper">
+              <Map size={14} className="nexus-icon nexus-icon-bicolor" />
+            </div> Corredor Logístico
           </label>
           <div className="select-wrapper" style={{ position: 'relative' }}>
             <select 

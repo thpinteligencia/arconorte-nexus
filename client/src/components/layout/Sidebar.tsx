@@ -115,7 +115,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
                 }
               }}
             >
-              <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+              <div className={`nexus-icon-wrapper ${isActive ? 'nexus-icon-active' : ''}`}>
+                <Icon size={18} strokeWidth={isActive ? 2 : 1.75} className="nexus-icon nexus-icon-bicolor" />
+              </div>
               <span style={{ flex: 1, fontSize: '0.9rem' }}>{item.label}</span>
               {isActive && (
                 <div style={{ 

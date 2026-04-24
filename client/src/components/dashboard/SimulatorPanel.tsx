@@ -28,14 +28,19 @@ const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
   return (
     <aside className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-        <RefreshCw size={20} color="var(--primary)" />
+        <div className={`nexus-icon-framed ${isDownloading ? 'active nexus-icon-processing' : ''}`}>
+          <RefreshCw size={20} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
+        </div>
         <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Simulador Nexus</h3>
       </div>
 
       {/* UF Selector */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <MapPin size={14} /> Origem da Produção (UF)
+          <div className="nexus-icon-wrapper">
+            <MapPin size={14} className="nexus-icon nexus-icon-bicolor" />
+          </div>
+          Origem da Produção (UF)
         </label>
         <select 
           value={selectedUf} 
@@ -62,7 +67,10 @@ const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
       <div id="tutorial-vol-slider" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <Database size={14} /> Safra (Multiplicador)
+            <div className="nexus-icon-wrapper">
+              <Database size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
+            </div>
+            Safra (Multiplicador)
           </label>
           <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--primary)' }}>{volSoja}x</span>
         </div>
@@ -81,7 +89,10 @@ const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
       <div id="tutorial-cap-slider" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <Ship size={14} /> Capacidade Porto (Tons)
+            <div className="nexus-icon-wrapper">
+              <Ship size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-secondary" />
+            </div>
+            Capacidade Porto (Tons)
           </label>
           <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--secondary)' }}>
             {(capacidadePorto/1000).toFixed(0)}k

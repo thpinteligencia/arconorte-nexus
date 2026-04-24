@@ -99,14 +99,18 @@ const IpeCard: React.FC<IpeCardProps> = ({ ipe, pico, uf }) => {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)', fontWeight: 600 }}>PICO ESTIMADO</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '2px' }}>
-              <TrendingUp size={14} color="var(--primary)" />
+              <div className="nexus-icon-wrapper">
+                <TrendingUp size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-active" />
+              </div>
               <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)' }}>{(pico/1000).toFixed(1)}k <span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--text-muted)' }}>tons</span></strong>
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)', fontWeight: 600 }}>CONFIANÇA IA</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '2px' }}>
-              <Gauge size={14} color="var(--secondary)" />
+              <div className="nexus-icon-wrapper">
+                <Gauge size={14} className="nexus-icon nexus-icon-bicolor nexus-icon-secondary" />
+              </div>
               <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)' }}>98.4<span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--text-muted)' }}>%</span></strong>
             </div>
           </div>
