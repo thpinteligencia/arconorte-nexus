@@ -51,7 +51,7 @@ class PredictorService:
             
         return self.loaded_models[cache_key][0], self.loaded_models[cache_key][1], model_meta.get("max_tons_sanity", 500000)
 
-    def predict_12_months(self, df_recent: pd.DataFrame, ncm: str, uf_id: str, vol_mult: float = 1.0):
+    def predict_12_months(self, df_recent: pd.DataFrame, ncm: str, uf_id: str, vol_mult: float = 1.0, db = None):
         """
         Executa o Rollout Recursivo baseado no Model Registry.
         """
@@ -104,21 +104,22 @@ class PredictorService:
             current_data = np.vstack([current_data[1:], new_row_unscaled])
             last_date = next_date
             
-        # Auditoria: Registrar inferência no banco de dados
-        self._log_inference(
-            uf=uf_id,
-            ncm=ncm,
-            vol_mult=vol_mult,
-            predictions=predictions,
-            seed_data=df_recent.tail(LOOKBACK).to_dict(orient='records')
-        )
+        # Auditoria: Registrar inferência no banco de dados se a sessão for fornecida
+        if db:
+            self._log_inference(
+                db=db,
+                uf=uf_id,
+                ncm=ncm,
+                vol_mult=vol_mult,
+                predictions=predictions,
+                seed_data=df_recent.tail(LOOKBACK).to_dict(orient='records')
+            )
             
         return predictions
 
-    def _log_inference(self, uf, ncm, vol_mult, predictions, seed_data):
-        """Registra a inferência para trilha de auditoria."""
+    def _log_inference(self, db, uf, ncm, vol_mult, predictions, seed_data):
+        """Registra a inferência para trilha de auditoria usando a sessão fornecida."""
         try:
-            db = SessionLocal()
             log_entry = InferenceLog(
                 uf=uf,
                 ncm=ncm,
@@ -128,6 +129,6 @@ class PredictorService:
             )
             db.add(log_entry)
             db.commit()
-            db.close()
         except Exception as e:
+            db.rollback()
             print(f"⚠️ Erro ao registrar log de auditoria: {e}")

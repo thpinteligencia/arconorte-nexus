@@ -16,13 +16,17 @@ APIKey = str
 API_KEY_NAME = "X-API-Key"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
-# Chaves carregadas de variáveis de ambiente com fallback para dev
-ENV_KEYS = os.environ.get("NEXUS_API_KEYS", "nexus_dev_2026,sefaz_rr_partner,aprosoja_rr_nexus")
-VALID_API_KEYS = [key.strip() for key in ENV_KEYS.split(",")]
+# Chaves carregadas de variáveis de ambiente (OBRIGATÓRIO em produção)
+ENV_KEYS = os.environ.get("NEXUS_API_KEYS", "")
+VALID_API_KEYS = [key.strip() for key in ENV_KEYS.split(",")] if ENV_KEYS else []
 
 async def get_api_key(header_key: str = Security(api_key_header)):
-    if header_key in VALID_API_KEYS:
+    if header_key and header_key in VALID_API_KEYS:
         return header_key
+    # Se estivermos em desenvolvimento e sem chaves configuradas, podemos permitir um modo restrito ou exigir a config
+    if not VALID_API_KEYS:
+         print("⚠️ AVISO: Nenhuma API Key configurada em NEXUS_API_KEYS. Acesso externo bloqueado.")
+    
     raise HTTPException(
         status_code=403, detail="Acesso negado: API Key inválida ou ausente."
     )
@@ -60,9 +64,13 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "http://localhost:5173",  # Vite Dev
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",  # Alternativa
+    ],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["X-API-Key", "Content-Type"],
 )
 
 class SimulationRequest(BaseModel):
@@ -123,7 +131,7 @@ def get_audit_metrics(db: Session = Depends(get_db), api_key: APIKey = Depends(g
     }
 
 @app.post("/api/v1/predict/soja")
-async def predict_soja(req: SimulationRequest, api_key: APIKey = Depends(get_api_key)):
+async def predict_soja(req: SimulationRequest, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
     if not predictor:
         raise HTTPException(status_code=503, detail="Motor de IA indisponível.")
     
@@ -135,7 +143,7 @@ async def predict_soja(req: SimulationRequest, api_key: APIKey = Depends(get_api
             raise HTTPException(status_code=503, detail="Dados ComexStat indisponíveis.")
 
         # 2. Rollout Recursivo (IA Real por UF)
-        soja_preds = predictor.predict_12_months(df_recent, ncm="12019000", uf_id=req.uf, vol_mult=req.volSoja)
+        soja_preds = predictor.predict_12_months(df_recent, ncm="12019000", uf_id=req.uf, vol_mult=req.volSoja, db=db)
         
         # 3. Cálculo unificado IPE (Foco Soja)
         results = IPEEngine.calculate_metrics(soja_preds, req.capacity)
@@ -146,7 +154,7 @@ async def predict_soja(req: SimulationRequest, api_key: APIKey = Depends(get_api
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/v1/report/pdf")
-async def generate_pdf_report(req: SimulationRequest, api_key: APIKey = Depends(get_api_key)):
+async def generate_pdf_report(req: SimulationRequest, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
     """Gera e retorna o Boletim Estratégico em PDF."""
     if not predictor:
         raise HTTPException(status_code=503, detail="Motor de IA indisponível.")
@@ -157,7 +165,7 @@ async def generate_pdf_report(req: SimulationRequest, api_key: APIKey = Depends(
         if df_recent.empty:
             raise HTTPException(status_code=503, detail="Dados ComexStat indisponíveis.")
 
-        soja_preds = predictor.predict_12_months(df_recent, ncm="12019000", uf_id=req.uf, vol_mult=req.volSoja)
+        soja_preds = predictor.predict_12_months(df_recent, ncm="12019000", uf_id=req.uf, vol_mult=req.volSoja, db=db)
         results = IPEEngine.calculate_metrics(soja_preds, req.capacity)
         
         # 2. Gerar PDF

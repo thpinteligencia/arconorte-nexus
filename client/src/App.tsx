@@ -63,9 +63,7 @@ const App = () => {
 
   // --- Busca de Registro (Disponibilidade) ---
   useEffect(() => {
-    fetch('/api/v1/registry', {
-      headers: { 'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026' }
-    })
+    fetch('/api/v1/registry')
       .then(res => res.json())
       .then(registry => {
         const ufs = Object.keys(registry["12019000"] || {});
@@ -86,8 +84,7 @@ const App = () => {
       const response = await fetch('/api/v1/predict/soja', {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           uf: selectedUf,
@@ -121,8 +118,7 @@ const App = () => {
       const response = await fetch('/api/v1/report/pdf', {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           uf: selectedUf,

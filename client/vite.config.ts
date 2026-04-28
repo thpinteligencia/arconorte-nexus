@@ -10,6 +10,9 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
+        headers: {
+          'X-API-Key': process.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026'
+        }
       }
     }
   }

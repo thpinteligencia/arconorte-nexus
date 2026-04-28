@@ -8,9 +8,7 @@ const AuditPanel = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/v1/audit/metrics', {
-      headers: { 'X-API-Key': import.meta.env.VITE_NEXUS_API_KEY || 'nexus_dev_2026' }
-    })
+    fetch('/api/v1/audit/metrics')
       .then(res => res.json())
       .then(data => {
         setAuditData(data);
