@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const PredictionChart: React.FC<PredictionChartProps> = ({ data }) => {
+const PredictionChart: React.FC<PredictionChartProps> = React.memo(({ data }) => {
   return (
     <div className="glass-card" style={{ padding: '1.5rem', height: '400px', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
@@ -115,6 +115,6 @@ const PredictionChart: React.FC<PredictionChartProps> = ({ data }) => {
       </div>
     </div>
   );
-};
+});
 
 export default PredictionChart;

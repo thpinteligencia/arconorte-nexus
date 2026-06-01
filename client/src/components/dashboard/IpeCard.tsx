@@ -8,7 +8,7 @@ interface IpeCardProps {
   uf: string;
 }
 
-const IpeCard: React.FC<IpeCardProps> = ({ ipe, pico, uf }) => {
+const IpeCard: React.FC<IpeCardProps> = React.memo(({ ipe, pico, uf }) => {
   const getStatus = (val: number) => {
     if (val < 50) return { label: 'Operação Normal', color: '#34A853', bg: 'rgba(52, 168, 83, 0.1)' };
     if (val < 80) return { label: 'Alerta de Fluxo', color: '#F4A261', bg: 'rgba(244, 162, 97, 0.1)' };
@@ -119,6 +119,6 @@ const IpeCard: React.FC<IpeCardProps> = ({ ipe, pico, uf }) => {
       </div>
     </div>
   );
-};
+});
 
 export default IpeCard;

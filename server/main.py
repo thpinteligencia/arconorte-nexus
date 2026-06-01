@@ -154,7 +154,7 @@ async def predict_soja(req: SimulationRequest, db: Session = Depends(get_db), ap
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/v1/report/pdf")
-async def generate_pdf_report(req: SimulationRequest, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
+async def generate_pdf_report(req: SimulationRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
     """Gera e retorna o Boletim Estratégico em PDF."""
     if not predictor:
         raise HTTPException(status_code=503, detail="Motor de IA indisponível.")
@@ -165,10 +165,21 @@ async def generate_pdf_report(req: SimulationRequest, db: Session = Depends(get_
         if df_recent.empty:
             raise HTTPException(status_code=503, detail="Dados ComexStat indisponíveis.")
 
-        soja_preds = predictor.predict_12_months(df_recent, ncm="12019000", uf_id=req.uf, vol_mult=req.volSoja, db=db)
+        soja_preds = predictor.predict_12_months(df_recent, ncm="12019000", uf_id=req.uf, vol_mult=req.volSoja, db=None)
         results = IPEEngine.calculate_metrics(soja_preds, req.capacity)
         
-        # 2. Gerar PDF
+        # 2. Registrar geração do relatório em segundo plano
+        background_tasks.add_task(
+            predictor._log_inference,
+            db=db,
+            uf=req.uf,
+            ncm="12019000",
+            vol_mult=req.volSoja,
+            predictions=soja_preds,
+            seed_data=df_recent.tail(3).to_dict(orient='records')
+        )
+
+        # 3. Gerar PDF
         ufs_map = {"14": "Roraima", "13": "Amazonas", "15": "Pará", "51": "Mato Grosso"}
         uf_name = ufs_map.get(req.uf, f"UF {req.uf}")
         

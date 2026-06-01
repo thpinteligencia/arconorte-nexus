@@ -15,7 +15,7 @@ interface SimulatorPanelProps {
   isDownloading: boolean;
 }
 
-const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
+const SimulatorPanel: React.FC<SimulatorPanelProps> = React.memo(({
   selectedUf,
   setSelectedUf,
   availableUfs,
@@ -147,6 +147,6 @@ const SimulatorPanel: React.FC<SimulatorPanelProps> = ({
       </button>
     </aside>
   );
-};
+});
 
 export default SimulatorPanel;
