@@ -1,84 +1,77 @@
-# Referência da API: ArcoNorte Nexus
+# Referência da API: ArcoNorte Nexus (v21.04.2026)
 
-## 🚀 Endpoints da API (v1)
+## 🚀 Endpoints Principais
 
-### 🩺 Status da API
-**GET `/api/v1/status`**
-Retorna o estado operacional do sistema e verifica se o motor de IA foi carregado corretamente.
-
-#### Resposta (200 OK)
-```json
-{
-  "status": "operational",
-  "model_loaded": true
-}
-```
-
----
-
-### 📋 Registro de Modelos
+### 📋 Registro de Modelos Ativos
 **GET `/api/v1/registry`**
-Lista todos os modelos e scalers disponíveis no sistema, incluindo metadados como UF, NCM e métricas de acurácia.
+Retorna o conteúdo do `model_registry.json`. Utilizado pelo Frontend para saber quais filtros de UF e NCM habilitar na interface.
 
 #### Resposta (200 OK)
 ```json
 {
-  "models": [
-    {
-      "ncm": "12019000",
-      "uf": "14",
-      "version": "1.0",
-      "path": "model_12019000_14.keras"
+  "12019000": {
+    "14": {
+      "status": "active",
+      "model_path": "model_12019000_14.keras",
+      "scaler_path": "scaler_12019000_14.pkl",
+      "max_tons_sanity": 380
     }
-  ]
-}
-```
-
----
-
-### 🧪 Simulador de Cenários
-**POST `/api/v1/simulate`**
-Envia parâmetros de simulação (capacidade do porto, volumes de safra) e recebe as predições de escoamento e IPE (Índice de Pressão de Escoamento).
-
-#### Requisição
-```json
-{
-  "capacity": 70000,
-  "uf": "14",
-  "volSoja": 1.2,
-  "volMilho": 1.0,
-  "volArroz": 0.8
-}
-```
-
-#### Resposta (200 OK)
-```json
-{
-  "ipe_timeline": [
-    { "month": "Jan", "ipe": 45.2, "stress_level": "Normal" },
-    { "month": "Fev", "ipe": 88.5, "stress_level": "Crítico" }
-  ],
-  "predictions": {
-    "soja": [12000, 15000, 18000],
-    "milho": [2000, 3000, 4000],
-    "arroz": [5000, 6000, 7000]
   }
 }
 ```
 
 ---
 
-## 🛠️ Erros Comuns
+### 🔮 Motor Preditivo de Soja (Integração Principal)
+**POST `/api/v1/predict/soja`**
+Aciona o pipeline completo: busca dados reais, executa inferência via `PredictorService` e calcula métricas via `IPEEngine`.
+
+#### Parâmetros da Requisição
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `uf` | string | ID da Unidade Federativa (ex: "14" para RR). |
+| `capacity` | number | Capacidade estática do porto em toneladas. |
+| `volSoja` | number | Multiplicador de volume para simulação de safra. |
+
+#### Exemplo de Payload
+```json
+{
+  "uf": "14",
+  "capacity": 70000,
+  "volSoja": 1.2
+}
+```
+
+#### Resposta (200 OK)
+```json
+{
+  "chartData": [
+    { "name": "Jan", "soja": 1250.5, "total": 1250.5, "ipe": 1.79 },
+    { "name": "Fev", "soja": 45000.0, "total": 45000.0, "ipe": 64.29 }
+  ],
+  "overallIPE": 64.29,
+  "picoTotal": 45000.0
+}
+```
+
+---
+
+## 🛠️ Serviços Internos (Arquitetura)
+
+### PredictorService
+- **Rollout Recursivo:** Previsão de 12 meses onde o output de $t+1$ serve como input para $t+2$.
+- **Memória:** Mantém os modelos carregados em um dicionário de cache para evitar IO excessivo.
+
+### IPEEngine
+- **Cálculo de Pressão:** Define a fórmula `(Volume Total / Capacidade) * 100`.
+- **Nível de Stress:** Atribui categorias (Normal, Alerta, Crítico) baseadas no IPE calculado.
+
+---
+
+## 🚦 Códigos de Erro
 
 | Código | Descrição |
 |--------|-----------|
-| 400 | Payload de simulação inválido ou mal formatado. |
-| 404 | Modelo não encontrado para a combinação UF/NCM solicitada. |
-| 500 | Erro interno no motor de inferência (TensorFlow). |
-
-## 🧪 Exemplo de cURL
-```bash
-curl -X POST http://localhost:8000/api/v1/simulate \
-     -H "Content-Type: application/json" \
-     -d '{"capacity": 70000, "uf": "14"}'
-```
+| 503 | Motor de IA indisponível ou dados do ComexStat fora do ar. |
+| 404 | Modelo não encontrado para a UF/NCM solicitada no registro. |
+| 500 | Erro interno no processamento de tensores ou pós-processamento. |

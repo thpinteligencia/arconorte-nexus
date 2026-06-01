@@ -1,0 +1,20 @@
+A pasta **`server/core`** contém a lógica principal de processamento de dados e inteligência artificial do backend do projeto. Atualmente, ela abriga o seguinte arquivo:
+
+### 1. **`train_engine.py`**
+Este arquivo define a classe **`TrainEngine`**, que é o motor de ETL e treinamento dos modelos preditivos do Arconorte-Nexus. As principais funções desempenhadas por ela são:
+
+* **ETL de Dados Históricos (`etl_xlsx`)**:
+  * Realiza o processo de ETL (Extração, Transformação e Carga) a partir de planilhas locais do ComexStat (`.xlsx`). Ele "despivota" as tabelas em formato largo (*wide*) e as transforma em uma série temporal linear contendo as colunas `Peso_Liquido` e `Valor_FOB`.
+  * Integra informações sazonais regionais chamando a função `is_safra_ativa` para definir se um determinado mês faz parte do período de safra ativa de um produto (ex: Soja) para a respectiva Unidade Federativa (UF).
+
+* **Treinamento e Validação do Modelo (`train_model`)**:
+  * Configura e treina uma rede neural **Micro-LSTM** (Long Short-Term Memory) usando a biblioteca TensorFlow/Keras para predição recursiva com base nas variáveis estruturadas (`Peso_Liquido`, `Valor_FOB` e `Safra_Ativa`).
+  * Normaliza os dados usando o `MinMaxScaler` do Scikit-Learn.
+  * Executa o treinamento contendo técnicas para evitar overfitting, como regularização L2 e parada antecipada (`EarlyStopping`).
+
+* **Salvamento de Artefatos e Registro (`_update_registry`)**:
+  * Grava os arquivos binários do modelo treinado (`.keras`) e do escalador (`.pkl`) na pasta `/data/models`.
+  * Cria ou atualiza as entradas no arquivo **`server/data/model_registry.json`** com os caminhos dos novos arquivos, métricas de perda de treino (RMSE), data do último treinamento e status do modelo (ativado).
+
+### Resumo da Pasta
+Em suma, a pasta `server/core` serve como o núcleo de treinamento e re-treinamento automatizado dos modelos de Inteligência Artificial do sistema, preparando e versionando-os para que o serviço de predição (`PredictorService`) possa usá-los nas inferências do dia a dia.

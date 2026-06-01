@@ -1,31 +1,25 @@
-# Padrões de Código: ArcoNorte Nexus
-
-## 🛠️ Filosofia de Desenvolvimento
-Priorizamos código legível, modular e fortemente tipado. O objetivo é manter a manutenibilidade enquanto lidamos com modelos complexos de ML e visualizações densas de dados.
+# Padrões de Código: ArcoNorte Nexus (v2.0)
 
 ## 🐍 Python (Backend)
 - **Framework:** FastAPI.
-- **Estilo:** Seguir o [PEP 8](https://www.python.org/dev/peps/pep-0008/).
-- **Tipagem:** Utilizar *Type Hints* em todas as funções e métodos.
-- **Validação:** Pydantic para todos os esquemas de entrada/saída da API.
-- **ML Ops:** Modelos devem ser carregados via `PredictorService` (padrão Singleton) para evitar recarregamentos desnecessários em cada request.
+- **Serviços:** Lógica de negócio deve ser encapsulada em classes Service (ex: `PredictorService`).
+- **Data Persistence:** O arquivo `model_registry.json` é a fonte da verdade para ativos de ML. Nunca hardcodear caminhos de modelos.
+- **Tipagem:** Uso obrigatório de *Type Hints* e modelos Pydantic para validação de contratos de API.
 
 ## ⚛️ React & TypeScript (Frontend)
-- **Componentes:** Preferir Componentes Funcionais com Hooks.
-- **Estilização:** Tailwind CSS (evitar CSS puro ou Styled Components, a menos que seja estritamente necessário).
-- **Nomenclatura:**
-  - Componentes: `PascalCase` (ex: `DashboardCard.tsx`).
-  - Funções/Variáveis: `camelCase`.
-  - Constantes: `UPPER_SNAKE_CASE`.
-- **Props:** Definir interfaces TypeScript para todas as props de componentes.
+- **Estilização:** **CSS Modules** é o padrão obrigatório para novos componentes.
+  - Arquivo: `NomeComponente.module.css`.
+  - Uso: `import styles from './Nome.module.css'`.
+- **CSS Global:** Reservado apenas para variáveis de tema (`:root`) e resets básicos.
+- **Componentes:** Devem ser funcionais, utilizando Hooks e seguindo o princípio de responsabilidade única.
 
 ## 📂 Organização de Arquivos
-- **Surgical Updates:** Ao modificar arquivos grandes, use ferramentas de substituição precisa em vez de sobrescrever o arquivo inteiro.
-- **Clean Imports:** Agrupar imports por (1) bibliotecas externas, (2) bibliotecas internas do projeto, (3) tipos/interfaces.
+- **Artefatos:** Modelos `.keras` e `.pkl` devem ser salvos em `server/artifacts/` e registrados em `server/data/model_registry.json`.
+- **Imports:** Manter imports limpos e organizados por categoria.
 
-## 🧪 Testes e Validação
-- **Backend:** Testes unitários para lógica de cálculo do IPE e integração da API.
-- **Frontend:** Verificar integridade visual e funcional dos gráficos após mudanças no backend.
+## 🧠 Boas Práticas de ML Ops
+- **Lazy Loading:** Modelos devem ser carregados apenas quando solicitados e mantidos em cache no Singleton do `PredictorService`.
+- **Sanity Checks:** Implementar limites físicos (baseados no histórico da UF) para evitar predições irreais em cenários de simulação extrema.
 
 ---
-*Manter o padrão é garantir a escalabilidade.*
+*Escalabilidade com rigor técnico.*

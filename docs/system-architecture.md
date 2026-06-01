@@ -1,42 +1,49 @@
-# Arquitetura do Sistema: ArcoNorte Nexus
+# Arquitetura do Sistema: ArcoNorte Nexus (v2.0)
 
 ## 🏗️ Visão Geral Técnica
-O sistema utiliza uma arquitetura cliente-servidor moderna, separando claramente a camada de visualização (Frontend) da camada de processamento pesado e inferência de IA (Backend).
+O sistema evoluiu para uma arquitetura desacoplada onde o processamento pesado e a inteligência de dados residem inteiramente no Backend, enquanto o Frontend foca na visualização e interação do usuário.
 
-### 🎨 Frontend (React + Vite)
-- **Framework:** React 18 com TypeScript para tipagem forte.
-- **Estilização:** Tailwind CSS para design responsivo e `lucide-react` para ícones.
-- **Visualização de Dados:** `recharts` para gráficos de área, barras e linhas.
-- **Estado Global:** Hooks nativos do React (Context API se necessário).
+### 🎨 Frontend (React + CSS Modules)
+- **Framework:** React 18 com TypeScript.
+- **Estilização:** Transição para **CSS Modules** para evitar colisões de estilo e aumentar a manutenibilidade, mantendo o Tailwind CSS para utilitários globais.
+- **Visualização:** `recharts` integrado diretamente com o payload do `IPEEngine`.
 
-### ⚡ Backend (FastAPI + Python)
-- **Framework:** FastAPI para APIs de alta performance com tipagem via Pydantic.
-- **Inference Engine:** TensorFlow/Keras para carregamento e execução de modelos Micro-LSTM.
-- **Data Fetcher:** Módulo customizado para ingestão de dados via API do ComexStat.
-- **Middleware:** CORS habilitado para comunicação segura com o frontend.
+### ⚡ Backend (FastAPI + IPE Logic)
+- **Framework:** FastAPI gerenciando o ciclo de vida da aplicação.
+- **PredictorService:** Serviço centralizado que gerencia o cache de modelos Micro-LSTM e executa o rollout recursivo para predições de 12 meses.
+- **IPEEngine:** Motor lógico que unifica as predições de Soja e calcula o Índice de Pressão de Escoamento em tempo real.
+- **Model Registry:** Uso do `model_registry.json` como fonte da verdade para localização de arquivos `.keras` e `.pkl`, permitindo atualizações dinâmicas de modelos sem alteração no código fonte.
 
-## 🧠 Pipeline de Machine Learning
-O núcleo preditivo do sistema baseia-se no modelo **Micro-LSTM** desenvolvido para o artigo ECAI.
+## 🧠 Pipeline de Machine Learning & Gestão de Ativos
+A inteligência do sistema agora é gerenciada dinamicamente:
 
-1.  **Ingestão de Dados:** O sistema consome dados de exportação mensais filtrados por UF (Unidade Federativa) e NCM (Nomenclatura Comum do Mercosul).
-2.  **Pré-processamento:** Normalização dos dados via `MinMaxScaler` (arquivos `.pkl` nos artefatos).
-3.  **Inferência:** Execução do modelo `.keras` para prever os próximos meses de exportação.
-4.  **Pós-processamento:** Des-normalização dos resultados e agregação com a lógica do **IPE (Índice de Pressão de Escoamento)**.
+1.  **Registro Dinâmico:** O backend lê o `model_registry.json` para saber quais UFs e NCMS possuem modelos ativos.
+2.  **Inference Engine:** O `PredictorService` carrega os modelos sob demanda (lazy loading) e os mantém em cache.
+3.  **Sanity Check:** Cada modelo no registro possui metadados de `max_tons_sanity` para evitar anomalias estatísticas na predição.
+4.  **Consumo de Dados:** Integração robusta com o `ComexStat` para buscar os últimos 6 meses de dados reais como semente para a predição LSTM.
 
-## 🔄 Fluxo de Dados
+## 🔄 Fluxo de Integração Real
 
 ```ascii
-┌─────────────┐     ┌─────────────┐     ┌────────────────┐
-│   Frontend  │────▶│   FastAPI   │────▶│   ComexStat    │
-│   (React)   │◀────│   (Python)  │◀────│   (Data Source)│
-└─────────────┘     └─────────────┘     └────────────────┘
-                           │                   ▲
-                           ▼                   │
-                    ┌────────────────┐  ┌─────────────┐
-                    │  ML Predictor  │  │   SQLite    │
-                    │  (LSTM Models) │  │   (Cache)   │
-                    └────────────────┘  └─────────────┘
+┌──────────────┐      ┌──────────────┐      ┌─────────────────┐
+│  Frontend    │      │   FastAPI    │      │    ComexStat    │
+│ (CSS Modules)│◀────▶│ (Main Entry) │◀────▶│ (Raw Data API)  │
+└──────────────┘      └──────────────┘      └─────────────────┘
+                             │
+                             ▼
+                      ┌────────────────┐      ┌─────────────────┐
+                      │ PredictorServ. │◀────▶│ Model Registry  │
+                      │ (LSTM Inference)│      │ (JSON Config)   │
+                      └────────────────┘      └─────────────────┘
+                             │
+                             ▼
+                      ┌────────────────┐
+                      │   IPE Engine   │
+                      │ (Logic/Metrics)│
+                      └────────────────┘
 ```
 
 ## 📂 Organização de Artefatos
-Os modelos e scalers são versionados no diretório `api/artifacts/`, garantindo que o backend tenha as versões corretas para cada UF e NCM.
+Os arquivos de modelo agora seguem uma convenção rigorosa mapeada no registro:
+- `api/artifacts/model_{NCM}_{UF}.keras`
+- `api/artifacts/scaler_{NCM}_{UF}.pkl`

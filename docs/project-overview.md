@@ -4,7 +4,7 @@
 O **ArcoNorte Nexus** é uma plataforma de inteligência voltada para o setor de agronegócio e logística. Ele transforma dados complexos de exportação (ComexStat) e modelos de Deep Learning (LSTM) em insights acionáveis para gestão portuária e escoamento de safras.
 
 ## 🎯 Objetivos Principais
-1. **Predição de Volume:** Prever o fluxo de exportação de Soja, Milho e Arroz com antecedência de 12 meses.
+1.  **Predição de Volume:** Prever o fluxo de exportação de Soja com antecedência de 12 meses. (Milho e Arroz: roadmap Fase 3)
 2. **Índice de Pressão de Escoamento (IPE):** Identificar períodos de gargalo logístico com base na capacidade estática do Porto Seco.
 3. **Simulação de Cenários:** Permitir que gestores simulem variações na safra e vejam o impacto imediato na logística estadual.
 
@@ -15,10 +15,12 @@ O **ArcoNorte Nexus** é uma plataforma de inteligência voltada para o setor de
 - Dashboards interativos e simuladores com dados simulados.
 - Definição da identidade visual "Modern Agro".
 
-### Fase 2: Motor Preditivo (Em Progresso)
-- Integração do backend FastAPI.
-- Implementação do pipeline de dados com a API do ComexStat.
-- Deploy de modelos Micro-LSTM pré-treinados para a trinca de grãos.
+### Fase 2: Motor Preditivo (Concluído - Atualizado em 21/04/2026)
+- Integração do backend FastAPI de alta performance.
+- Implementação do `PredictorService` com Rollout Recursivo.
+- Cálculo de SSoT (Single Source of Truth) para o IPE via `IPEEngine`.
+- Refatoração do Frontend para uso de **CSS Modules**, garantindo isolamento de estilos.
+- Gestão centralizada de ativos de IA via `model_registry.json`.
 
 ### Fase 3: Inteligência de Mercado (Futuro)
 - Geração automática de relatórios em PDF.
