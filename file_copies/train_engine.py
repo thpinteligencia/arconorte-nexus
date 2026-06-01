@@ -15,19 +15,11 @@ from server.utils.crop_calendars import is_safra_ativa
 # Configurações de Diretórios
 SERVER_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(SERVER_DIR)
-ARTIFACTS_DIR = os.getenv("MODEL_ARTIFACTS_DIR", os.path.join(ROOT_DIR, "data", "models"))
+ARTIFACTS_DIR = os.path.join(ROOT_DIR, "data", "models")
 REGISTRY_PATH = os.path.join(SERVER_DIR, "data", "model_registry.json")
 
 LOOKBACK = 3
 N_FEATURES = 3
-
-# Limites de sanidade padrão por UF (toneladas máximas históricas)
-DEFAULT_SANITY_BY_UF = {
-    "14": 80000,    # Roraima
-    "13": 150000,   # Amazonas
-    "15": 500000,   # Pará
-    "51": 1200000,  # Mato Grosso
-}
 
 class TrainEngine:
     def __init__(self):
@@ -107,18 +99,14 @@ class TrainEngine:
         
         ncm_str, uf_str = str(ncm), str(uf_id)
         if ncm_str not in registry: registry[ncm_str] = {}
-
-        # Preservar campos não gerenciados pelo treino
-        existing = registry[ncm_str].get(uf_str, {})
         
         registry[ncm_str][uf_str] = {
-            "name": existing.get("name", f"NCM {ncm} - UF {uf_id}"),
+            "name": f"NCM {ncm} - UF {uf_id}",
             "model_path": m_name,
             "scaler_path": s_name,
             "rmse": round(float(rmse), 6),
             "last_train": datetime.now().strftime("%Y-%m-%d"),
-            "status": "active",
-            "max_tons_sanity": existing.get("max_tons_sanity", DEFAULT_SANITY_BY_UF.get(uf_str))
+            "status": "active"
         }
         
         with open(REGISTRY_PATH, 'w') as f:

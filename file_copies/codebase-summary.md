@@ -9,7 +9,7 @@ Este documento descreve a estrutura física do código e o fluxo de dados unific
 ### ⚡ `/server` (Backend Python - FastAPI)
 Contém toda a lógica preditiva, tratamento de dados governamentais e serviços da API.
 - **`main.py`:** Ponto de entrada da API contendo as rotas `/predict/soja`, `/registry` e `/report/pdf`.
-- **`/data/models` (raiz do projeto):** Arquivos binários de modelos (`.keras`) e escaladores (`.pkl`).
+- **`/artifacts`:** Arquivos binários de modelos (`.keras`) e escaladores (`.pkl`).
 - **`/data`:** Cache local do ComexStat (`comex_cache.json`) e banco de dados SQLite (`nexus.db`).
 - **`/data/model_registry.json`:** Registro central de modelos ativos, servindo como Single Source of Truth (SSoT) para os metadados de UFs/NCMs.
 - **`/services`:**

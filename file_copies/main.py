@@ -2,7 +2,7 @@ import sys
 import os
 import json
 from datetime import datetime
-from fastapi import FastAPI, HTTPException, Depends, Security, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, Security
 from fastapi.responses import StreamingResponse
 from fastapi.security import APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware

@@ -45,5 +45,5 @@ A inteligência do sistema agora é gerenciada dinamicamente:
 
 ## 📂 Organização de Artefatos
 Os arquivos de modelo agora seguem uma convenção rigorosa mapeada no registro:
-- `data/models/model_{NCM}_{UF}.keras`
-- `data/models/scaler_{NCM}_{UF}.pkl`
+- `api/artifacts/model_{NCM}_{UF}.keras`
+- `api/artifacts/scaler_{NCM}_{UF}.pkl`

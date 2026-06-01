@@ -1,0 +1,17 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vscode/
+.idea/
+.DS_Store
+.aider*
+server/venv/
+server/data/*.json
+server/data/*.db
+__pycache__/
+*.py[cod]
+*$py.class
+*.txt
+train_soy_rr.py
+claude/

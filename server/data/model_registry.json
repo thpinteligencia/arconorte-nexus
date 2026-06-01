@@ -1,28 +1,32 @@
 {
   "12019000": {
-    "13": {
-      "status": "active",
-      "model_path": "model_12019000_13.keras",
-      "scaler_path": "scaler_12019000_13.pkl",
-      "max_tons_sanity": 500000
-    },
     "14": {
-      "status": "active",
+      "name": "Soja - Roraima",
       "model_path": "soy_rr_model.keras",
       "scaler_path": "soy_rr_scaler.pkl",
-      "max_tons_sanity": 500000
+      "status": "active",
+      "max_tons_sanity": 80000
+    },
+    "13": {
+      "name": "Soja - Amazonas",
+      "model_path": "model_12019000_13.keras",
+      "scaler_path": "scaler_12019000_13.pkl",
+      "status": "active",
+      "max_tons_sanity": 150000
     },
     "15": {
-      "status": "active",
+      "name": "Soja - Pará",
       "model_path": "model_12019000_15.keras",
       "scaler_path": "scaler_12019000_15.pkl",
-      "max_tons_sanity": 800000
+      "status": "active",
+      "max_tons_sanity": 500000
     },
     "51": {
-      "status": "active",
+      "name": "Soja - Mato Grosso",
       "model_path": "model_12019000_51.keras",
       "scaler_path": "scaler_12019000_51.pkl",
-      "max_tons_sanity": 2000000
+      "status": "active",
+      "max_tons_sanity": 1200000
     }
   }
 }

@@ -1,4 +1,15 @@
-A pasta **`server/artifacts`** está atualmente **vazia**.
+## ✅ Resolução (Junho 2026)
+
+A divergência histórica sobre o diretório de artefatos foi resolvida.
+
+- **Diretório oficial de modelos e escaladores:** `data/models/` na raiz do projeto, configurável via `MODEL_ARTIFACTS_DIR`.
+- **Registro oficial de modelos:** `server/data/model_registry.json` (Single Source of Truth).
+- **Valores de `max_tons_sanity`** unificados a partir do registry do `api/` (RR=80k, AM=150k, PA=500k, MT=1.2M).
+- A pasta `server/artifacts/` permanece **apenas como documentação histórica** e **não deve receber novos binários `.keras` ou `.pkl`**.
+
+---
+
+A pasta **`server/artifacts`** está atualmente **vazia** (exceto este documento de legado).
 
 No entanto, conforme estabelecido na documentação de padrões do projeto (`docs/code-standards.md`), ela é designada para guardar os **artefatos de Machine Learning** (modelos de previsão treinados `.keras` e os normalizadores/escaladores `.pkl`).
 

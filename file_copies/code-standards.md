@@ -14,7 +14,7 @@
 - **Componentes:** Devem ser funcionais, utilizando Hooks e seguindo o princípio de responsabilidade única.
 
 ## 📂 Organização de Arquivos
-- **Artefatos:** Modelos `.keras` e `.pkl` devem ser salvos em `data/models/` (raiz do projeto) e registrados em `server/data/model_registry.json`. O caminho é configurável via a variável de ambiente `MODEL_ARTIFACTS_DIR`.
+- **Artefatos:** Modelos `.keras` e `.pkl` devem ser salvos em `server/artifacts/` e registrados em `server/data/model_registry.json`.
 - **Imports:** Manter imports limpos e organizados por categoria.
 
 ## 🧠 Boas Práticas de ML Ops

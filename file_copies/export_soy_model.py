@@ -21,7 +21,7 @@ UF_ID = 14  # Roraima
 NCM_ALVO = 12019000  # Soja
 LOOKBACK = 3
 N_FEATURES = 3 
-ARTIFACTS_DIR = os.getenv("MODEL_ARTIFACTS_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "models"))
+ARTIFACTS_DIR = "api/artifacts"
 FALLBACK_XLSX = "exportacoes_rr.xlsx"
 
 if not os.path.exists(ARTIFACTS_DIR):

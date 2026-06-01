@@ -8,6 +8,7 @@ dist-ssr/
 .aider*
 server/venv/
 server/data/*.json
+!server/data/model_registry.json
 server/data/*.db
 __pycache__/
 *.py[cod]
@@ -15,3 +16,8 @@ __pycache__/
 *.txt
 train_soy_rr.py
 claude/
+
+# Artefatos de ML — binários já versionados permanecem por compatibilidade,
+# mas novos artefatos gerados não entram no staging automaticamente.
+data/models/*.keras
+data/models/*.pkl

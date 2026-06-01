@@ -14,7 +14,7 @@ from server.db.models import InferenceLog
 SERVER_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(SERVER_DIR)
 REGISTRY_PATH = os.path.join(SERVER_DIR, "data", "model_registry.json")
-ARTIFACTS_DIR = os.path.join(ROOT_DIR, "data", "models")
+ARTIFACTS_DIR = os.getenv("MODEL_ARTIFACTS_DIR", os.path.join(ROOT_DIR, "data", "models"))
 
 LOOKBACK = 3
 N_FEATURES = 3 
